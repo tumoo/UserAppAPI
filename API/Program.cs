@@ -1,9 +1,26 @@
 using API.Data;
+using API.Data.Repositories;
+using API.Data.Repositories.Contracts;
+using API.Services;
+using API.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using API.Infrastructre.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<IProoductRepo, ProductRepo>();
+builder.Services.AddTransient<IProductService,ProductService>();
+
+//Add AutoMapper
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
